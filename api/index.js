@@ -51,18 +51,27 @@ async function ivyFetch(endpointPath, req) {
     headers['Authorization'] = token;
   }
 
-  const url = `${BASE_URL}${endpointPath}`;
-  const response = await fetch(url, {
+  const hasBody = ['POST', 'PUT', 'PATCH'].includes(req.method.toUpperCase()) && req.body && Object.keys(req.body).length > 0;
+  const options = {
     method: req.method,
-    headers,
-    body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : undefined
-  });
+    headers
+  };
+  if (hasBody) {
+    options.body = JSON.stringify(req.body);
+  }
 
-  const text = await response.text();
+  const url = `${BASE_URL}${endpointPath}`;
   try {
-    return { status: response.status, data: JSON.parse(text) };
-  } catch (e) {
-    return { status: response.status, text };
+    const response = await fetch(url, options);
+    const text = await response.text();
+    try {
+      return { status: response.status, data: JSON.parse(text) };
+    } catch (e) {
+      return { status: response.status, text };
+    }
+  } catch (err) {
+    console.error(`[IVY FETCH ERROR] ${url}:`, err.message);
+    return { status: 500, data: { detail: err.message } };
   }
 }
 
