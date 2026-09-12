@@ -1,0 +1,183 @@
+{
+  "api_key": "IVY26-4C3EAEB6A76C",
+  "candidate": {
+    "name": "Naman Khanduja",
+    "email": "namankhanduja.work@gmail.com",
+    "repo_url": "https://github.com/namankhanduja/ivy-homes-assignment",
+    "demo_url": "https://ivy-homes-assignment.vercel.app"
+  },
+  "answers": {
+    "total_listing_records": 4000,
+    "unique_properties": 50,
+    "active_listings": 3520,
+    "corrupt_listing_ids": [
+      "MAG-4000039",
+      "MAG-4002264",
+      "MAG-4003492",
+      "MAG-4003885",
+      "SQU-4002903"
+    ],
+    "total_monthly_rent": 5031000,
+    "avg_price_per_sqft_2bhk": 9079.52,
+    "costliest_project": {
+      "project_id": "P40049",
+      "price_max_inr": 31100000
+    },
+    "listings_last_7_days": 80,
+    "fake_listing_ids": [
+      "100-4000035",
+      "100-4000289",
+      "100-4000399",
+      "100-4000450",
+      "100-4001055",
+      "100-4001307",
+      "100-4001716",
+      "100-4001718",
+      "100-4002612",
+      "100-4003009",
+      "100-4003522",
+      "100-4004033",
+      "100-4004075",
+      "DWE-4000855",
+      "DWE-4001070",
+      "DWE-4001191",
+      "DWE-4001305",
+      "DWE-4001488",
+      "DWE-4002244",
+      "DWE-4004096",
+      "MAG-4001131",
+      "MAG-4001518",
+      "MAG-4001840",
+      "MAG-4002264",
+      "MAG-4002445",
+      "MAG-4003126",
+      "MAG-4003492",
+      "MAG-4003885",
+      "SQU-4000712",
+      "SQU-4001315",
+      "SQU-4002241",
+      "SQU-4002860",
+      "SQU-4003837",
+      "ZER-4001632",
+      "ZER-4002010",
+      "ZER-4002707",
+      "ZER-4002840"
+    ],
+    "projects_with_wrong_listing_count": 387
+  },
+  "findings": [
+    {
+      "endpoint": "*",
+      "category": "auth",
+      "documented": "Every request must carry API key as query parameter: GET /v1/listings?api_key=IVY26-XXXXXXXXXXXX",
+      "actual": "API rejects query parameter with 401 'send your key in the X-API-Key request header, not as a query parameter'. Header X-API-Key is mandatory.",
+      "how_found": "Initial HTTP GET request with ?api_key= in query string returned 401 Unauthorized with header instructions.",
+      "impact": "All frontend/API client requests fail unless migrated to X-API-Key request header.",
+      "evidence": []
+    },
+    {
+      "endpoint": "/auth/login",
+      "category": "auth",
+      "documented": "Returns 'token' string valid for 86400 seconds (24 hours) with no refresh flow.",
+      "actual": "Returns 'access_token' and 'refresh_token' fields with expires_in=900 seconds (15 minutes) and refresh_url='/auth/refresh'.",
+      "how_found": "Inspected response body structure of POST /auth/login.",
+      "impact": "Frontend reading 'token' field gets undefined and user session expires in 15 mins instead of 24 hrs.",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "auth",
+      "documented": "Public listings browsing requires only api_key parameter without user login.",
+      "actual": "All /v1/ collection endpoints require Authorization: Bearer <access_token> header or return 401 missing bearer token.",
+      "how_found": "Requested /v1/listings with X-API-Key header but no Bearer token.",
+      "impact": "Unauthenticated visitors cannot browse property listings; login is strictly mandatory for all endpoints.",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "pagination",
+      "documented": "Limit parameter default 20, maximum 200.",
+      "actual": "Server hard-caps returned results array to maximum 50 records per page even when limit=200 is passed.",
+      "how_found": "Requested /v1/listings?page=1&limit=200 and observed exactly 50 records returned.",
+      "impact": "Full data retrieval requires 4x more API HTTP roundtrips than documented.",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/analytics/summary",
+      "category": "missing_endpoint",
+      "documented": "GET /v1/analytics/summary provides pre-computed aggregates for city dashboard.",
+      "actual": "Endpoint does not exist and returns HTTP 404 'Not Found'.",
+      "how_found": "Sent GET request to /v1/analytics/summary with valid key and token.",
+      "impact": "City analytics dashboard cannot fetch server pre-aggregates and must compute metrics client-side.",
+      "evidence": []
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "duplicates",
+      "documented": "Every listing_id is globally unique, and each listing corresponds to exactly one physical property.",
+      "actual": "Endpoint returns 4000 total records, which consist of only 50 unique listing_ids duplicated 80 times across pages.",
+      "how_found": "Paged through all 4000 records and grouped by listing_id.",
+      "impact": "Un-deduplicated property lists present 80 duplicate cards per property to buyers.",
+      "evidence": [
+        "MAG-4001518", "100-4000035", "MAG-4003885", "DWE-4001305", "DWE-4001488",
+        "SQU-4003837", "DWE-4002244", "SQU-4002747", "DWE-4000855", "100-4001716",
+        "ZER-4002707", "100-4003009", "MAG-4002264", "SQU-4000712", "DWE-4001070",
+        "100-4001307", "ZER-4002840", "ZER-4000909", "SQU-4002241", "100-4001830"
+      ]
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "units",
+      "documented": "Area: Square feet, integer, everywhere in the API.",
+      "actual": "Listings MAG-4003885, MAG-4002264, MAG-4003492, MAG-4000039 provide carpet_area in square meters (e.g. 111, 86, 100, 144 sq.m), causing impossible room sizes (<40 sqft/room) if read as sqft.",
+      "how_found": "Scanned carpet area to bedroom ratio across all listing records.",
+      "impact": "Price per sqft calculations and unit filters produce wild outliers unless converted (x 10.7639).",
+      "evidence": ["MAG-4003885", "MAG-4002264", "MAG-4003492", "MAG-4000039"]
+    },
+    {
+      "endpoint": "/v1/projects",
+      "category": "units",
+      "documented": "Money in Indian rupees, integer, everywhere in the API.",
+      "actual": "price_min and price_max in /v1/projects are floating point values in Lakhs (>=10) or Crores (<10) (e.g. 66.1 Lakhs, 1.95 Crores) instead of integer rupees.",
+      "how_found": "Inspected GET /v1/projects response fields.",
+      "impact": "Formatting as integer rupees displays project price as ₹66 instead of ₹66,10,000.",
+      "evidence": ["P40001", "P40002", "P40003", "P40004", "P40005", "P40006", "P40007", "P40008", "P40009", "P40010"]
+    },
+    {
+      "endpoint": "/v1/projects",
+      "category": "consistency",
+      "documented": "total_listings is recomputed whenever a listing is added or withdrawn so it always agrees with GET /v1/listings?project_id=...",
+      actual": "total_listings reported by 43 out of 50 projects contradicts the actual number of active listings associated with that project_id.",
+      how_found": "Cross-referenced project_id counts in /v1/listings against total_listings in /v1/projects.",
+      impact": "Project detail cards display inaccurate available unit counts.",
+      evidence": ["P40001", "P40002", "P40003", "P40004", "P40005", "P40007", "P40008", "P40009", "P40010", "P40011"]
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "consistency",
+      "documented": "project_id links listing to builder project, null for resale property not part of one.",
+      actual": "37 listing records reference project_id strings (e.g. P40244, P40142, P40262) that do not exist in the /v1/projects database.",
+      how_found": "Cross-referenced all project_ids in /v1/listings against /v1/projects list (P40001-P40050).",
+      impact": "Clicking project links on detail pages leads to 404 project not found errors.",
+      evidence: ["MAG-4001518", "100-4000035", "MAG-4003885", "DWE-4001305", "DWE-4001488", "SQU-4003837", "DWE-4002244", "DWE-4000855", "100-4001716", "ZER-4002707"]
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "data_quality",
+      "documented": "Listings contain accurate bedroom and physical property specifications.",
+      actual": "Listing SQU-4002903 reports bedroom=0 and bathroom=0 while described as a residential plot/home in Tambaram.",
+      how_found": "Filtered listings for bedroom <= 0 or bathroom <= 0.",
+      impact": "Causes zero-division or crash in property recommendation engines.",
+      evidence: ["SQU-4002903"]
+    },
+    {
+      "endpoint": "/v1/listings",
+      "category": "fraud",
+      "documented": "Active sale listings in your city.",
+      actual": "Listing SQU-4001315 is a clickbait fake listing priced at ₹28.10 Lakhs (60% below market average for Adyar 2BHKs) with text 'Price negotiable for quick sale' and invalid project reference.",
+      how_found": "Analyzed price per sqft ratio and description anomalies across Adyar listings.",
+      impact": "Bait-and-switch listing to harvest buyer lead contacts.",
+      evidence: ["SQU-4001315"]
+    }
+  ]
+}
