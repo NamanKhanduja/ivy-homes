@@ -11,6 +11,34 @@ const BASE_URL = process.env.BASE_URL || 'https://solve.ivy.homes';
 const API_KEY = process.env.API_KEY || 'IVY26-4C3EAEB6A76C';
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ivyhomes';
 
+// System-level token cache (auto-login for browse requests)
+let systemToken = null;
+let systemTokenExpiry = 0;
+
+async function getSystemToken() {
+  if (systemToken && Date.now() < systemTokenExpiry) {
+    return systemToken;
+  }
+  try {
+    const res = await fetch(`${BASE_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-API-Key': API_KEY },
+      body: JSON.stringify({ email: 'demo1@ivy.homes', password: '117e45bfc1' })
+    });
+    const data = await res.json();
+    const tok = data.access_token || data.token;
+    if (tok) {
+      systemToken = tok;
+      systemTokenExpiry = Date.now() + 55 * 60 * 1000; // 55 min cache
+      console.log('[SYSTEM] Auto-login token obtained successfully');
+    }
+    return tok;
+  } catch (err) {
+    console.error('[SYSTEM] Auto-login failed:', err.message);
+    return null;
+  }
+}
+
 let dbConnected = false;
 
 // Connect to MongoDB
@@ -41,14 +69,22 @@ const favouritesStore = {
 };
 
 // Helper: forward request to real Ivy Homes API with correct X-API-Key header
-async function ivyFetch(endpointPath, req) {
-  const token = req.headers.authorization;
+// If no user token is present, falls back to system-level auto-login token
+async function ivyFetch(endpointPath, req, useSystemTokenFallback = false) {
+  let authToken = req.headers.authorization;
+
+  // If no user token and fallback is allowed, use system token
+  if (!authToken && useSystemTokenFallback) {
+    const tok = await getSystemToken();
+    if (tok) authToken = `Bearer ${tok}`;
+  }
+
   const headers = {
     'X-API-Key': API_KEY,
     'Content-Type': 'application/json'
   };
-  if (token) {
-    headers['Authorization'] = token;
+  if (authToken) {
+    headers['Authorization'] = authToken;
   }
 
   const hasBody = ['POST', 'PUT', 'PATCH'].includes(req.method.toUpperCase()) && req.body && Object.keys(req.body).length > 0;
@@ -108,7 +144,7 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/listings', async (req, res) => {
   const queryString = new URLSearchParams(req.query).toString();
   const endpointPath = `/v1/listings${queryString ? '?' + queryString : ''}`;
-  const result = await ivyFetch(endpointPath, req);
+  const result = await ivyFetch(endpointPath, req, true); // allow system token fallback
 
   if (result.status === 200 && result.data && Array.isArray(result.data.results)) {
     const rawResults = result.data.results;
@@ -146,7 +182,7 @@ app.get('/api/listings', async (req, res) => {
 
 // Single listing route
 app.get('/api/listings/:id', async (req, res) => {
-  const result = await ivyFetch(`/v1/listings/${req.params.id}`, req);
+  const result = await ivyFetch(`/v1/listings/${req.params.id}`, req, true); // allow system token fallback
   if (result.status === 200 && result.data) {
     const item = result.data;
     let carpetAreaSqFt = item.carpet_area;
@@ -167,7 +203,7 @@ app.get('/api/listings/:id', async (req, res) => {
 // ---------------------------------------------------------
 app.get('/api/rentals', async (req, res) => {
   const queryString = new URLSearchParams(req.query).toString();
-  const result = await ivyFetch(`/v1/rentals${queryString ? '?' + queryString : ''}`, req);
+  const result = await ivyFetch(`/v1/rentals${queryString ? '?' + queryString : ''}`, req, true); // allow system token fallback
   return res.status(result.status).json(result.data || { detail: result.text });
 });
 
@@ -176,7 +212,7 @@ app.get('/api/rentals', async (req, res) => {
 // ---------------------------------------------------------
 app.get('/api/projects', async (req, res) => {
   const queryString = new URLSearchParams(req.query).toString();
-  const result = await ivyFetch(`/v1/projects${queryString ? '?' + queryString : ''}`, req);
+  const result = await ivyFetch(`/v1/projects${queryString ? '?' + queryString : ''}`, req, true); // allow system token fallback
 
   if (result.status === 200 && result.data && Array.isArray(result.data.results)) {
     const enriched = result.data.results.map(p => {
