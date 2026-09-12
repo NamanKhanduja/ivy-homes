@@ -119,10 +119,26 @@
       "how_found": "Paged through all 4000 records and grouped by listing_id.",
       "impact": "Un-deduplicated property lists present 80 duplicate cards per property to buyers.",
       "evidence": [
-        "MAG-4001518", "100-4000035", "MAG-4003885", "DWE-4001305", "DWE-4001488",
-        "SQU-4003837", "DWE-4002244", "SQU-4002747", "DWE-4000855", "100-4001716",
-        "ZER-4002707", "100-4003009", "MAG-4002264", "SQU-4000712", "DWE-4001070",
-        "100-4001307", "ZER-4002840", "ZER-4000909", "SQU-4002241", "100-4001830"
+        "MAG-4001518",
+        "100-4000035",
+        "MAG-4003885",
+        "DWE-4001305",
+        "DWE-4001488",
+        "SQU-4003837",
+        "DWE-4002244",
+        "SQU-4002747",
+        "DWE-4000855",
+        "100-4001716",
+        "ZER-4002707",
+        "100-4003009",
+        "MAG-4002264",
+        "SQU-4000712",
+        "DWE-4001070",
+        "100-4001307",
+        "ZER-4002840",
+        "ZER-4000909",
+        "SQU-4002241",
+        "100-4001830"
       ]
     },
     {
@@ -132,7 +148,12 @@
       "actual": "Listings MAG-4003885, MAG-4002264, MAG-4003492, MAG-4000039 provide carpet_area in square meters (e.g. 111, 86, 100, 144 sq.m), causing impossible room sizes (<40 sqft/room) if read as sqft.",
       "how_found": "Scanned carpet area to bedroom ratio across all listing records.",
       "impact": "Price per sqft calculations and unit filters produce wild outliers unless converted (x 10.7639).",
-      "evidence": ["MAG-4003885", "MAG-4002264", "MAG-4003492", "MAG-4000039"]
+      "evidence": [
+        "MAG-4003885",
+        "MAG-4002264",
+        "MAG-4003492",
+        "MAG-4000039"
+      ]
     },
     {
       "endpoint": "/v1/projects",
@@ -141,43 +162,80 @@
       "actual": "price_min and price_max in /v1/projects are floating point values in Lakhs (>=10) or Crores (<10) (e.g. 66.1 Lakhs, 1.95 Crores) instead of integer rupees.",
       "how_found": "Inspected GET /v1/projects response fields.",
       "impact": "Formatting as integer rupees displays project price as ₹66 instead of ₹66,10,000.",
-      "evidence": ["P40001", "P40002", "P40003", "P40004", "P40005", "P40006", "P40007", "P40008", "P40009", "P40010"]
+      "evidence": [
+        "P40001",
+        "P40002",
+        "P40003",
+        "P40004",
+        "P40005",
+        "P40006",
+        "P40007",
+        "P40008",
+        "P40009",
+        "P40010"
+      ]
     },
     {
       "endpoint": "/v1/projects",
       "category": "consistency",
       "documented": "total_listings is recomputed whenever a listing is added or withdrawn so it always agrees with GET /v1/listings?project_id=...",
-      actual": "total_listings reported by 43 out of 50 projects contradicts the actual number of active listings associated with that project_id.",
-      how_found": "Cross-referenced project_id counts in /v1/listings against total_listings in /v1/projects.",
-      impact": "Project detail cards display inaccurate available unit counts.",
-      evidence": ["P40001", "P40002", "P40003", "P40004", "P40005", "P40007", "P40008", "P40009", "P40010", "P40011"]
+      "actual": "total_listings reported by 43 out of 50 projects contradicts the actual number of active listings associated with that project_id.",
+      "how_found": "Cross-referenced project_id counts in /v1/listings against total_listings in /v1/projects.",
+      "impact": "Project detail cards display inaccurate available unit counts.",
+      "evidence": [
+        "P40001",
+        "P40002",
+        "P40003",
+        "P40004",
+        "P40005",
+        "P40007",
+        "P40008",
+        "P40009",
+        "P40010",
+        "P40011"
+      ]
     },
     {
       "endpoint": "/v1/listings",
       "category": "consistency",
       "documented": "project_id links listing to builder project, null for resale property not part of one.",
-      actual": "37 listing records reference project_id strings (e.g. P40244, P40142, P40262) that do not exist in the /v1/projects database.",
-      how_found": "Cross-referenced all project_ids in /v1/listings against /v1/projects list (P40001-P40050).",
-      impact": "Clicking project links on detail pages leads to 404 project not found errors.",
-      evidence: ["MAG-4001518", "100-4000035", "MAG-4003885", "DWE-4001305", "DWE-4001488", "SQU-4003837", "DWE-4002244", "DWE-4000855", "100-4001716", "ZER-4002707"]
+      "actual": "37 listing records reference project_id strings (e.g. P40244, P40142, P40262) that do not exist in the /v1/projects database.",
+      "how_found": "Cross-referenced all project_ids in /v1/listings against /v1/projects list (P40001-P40050).",
+      "impact": "Clicking project links on detail pages leads to 404 project not found errors.",
+      "evidence": [
+        "MAG-4001518",
+        "100-4000035",
+        "MAG-4003885",
+        "DWE-4001305",
+        "DWE-4001488",
+        "SQU-4003837",
+        "DWE-4002244",
+        "DWE-4000855",
+        "100-4001716",
+        "ZER-4002707"
+      ]
     },
     {
       "endpoint": "/v1/listings",
       "category": "data_quality",
       "documented": "Listings contain accurate bedroom and physical property specifications.",
-      actual": "Listing SQU-4002903 reports bedroom=0 and bathroom=0 while described as a residential plot/home in Tambaram.",
-      how_found": "Filtered listings for bedroom <= 0 or bathroom <= 0.",
-      impact": "Causes zero-division or crash in property recommendation engines.",
-      evidence: ["SQU-4002903"]
+      "actual": "Listing SQU-4002903 reports bedroom=0 and bathroom=0 while described as a residential plot/home in Tambaram.",
+      "how_found": "Filtered listings for bedroom <= 0 or bathroom <= 0.",
+      "impact": "Causes zero-division or crash in property recommendation engines.",
+      "evidence": [
+        "SQU-4002903"
+      ]
     },
     {
       "endpoint": "/v1/listings",
       "category": "fraud",
       "documented": "Active sale listings in your city.",
-      actual": "Listing SQU-4001315 is a clickbait fake listing priced at ₹28.10 Lakhs (60% below market average for Adyar 2BHKs) with text 'Price negotiable for quick sale' and invalid project reference.",
-      how_found": "Analyzed price per sqft ratio and description anomalies across Adyar listings.",
-      impact": "Bait-and-switch listing to harvest buyer lead contacts.",
-      evidence: ["SQU-4001315"]
+      "actual": "Listing SQU-4001315 is a clickbait fake listing priced at ₹28.10 Lakhs (60% below market average for Adyar 2BHKs) with text 'Price negotiable for quick sale' and invalid project reference.",
+      "how_found": "Analyzed price per sqft ratio and description anomalies across Adyar listings.",
+      "impact": "Bait-and-switch listing to harvest buyer lead contacts.",
+      "evidence": [
+        "SQU-4001315"
+      ]
     }
   ]
 }
