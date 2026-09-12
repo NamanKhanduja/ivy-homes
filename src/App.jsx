@@ -51,7 +51,7 @@ function AppContent() {
       <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
           <p>© 2026 Ivy Homes Internship Submission — Chennai Market Portal</p>
-          <p className="font-mono">API Key: IVY26-4C3EAEB6A76C</p>
+          <p>Built by Naman Khanduja</p>
         </div>
       </footer>
     </div>
