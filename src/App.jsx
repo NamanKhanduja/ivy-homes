@@ -32,14 +32,11 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans relative overflow-hidden">
-      {/* Premium gradient background with clean accents */}
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans relative overflow-hidden" style={{ backgroundColor: '#F8FAFC' }}>
+      {/* Subtle background accents */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Top right - Soft blue gradient */}
-        <div className="absolute -top-96 -right-96 w-screen h-screen bg-gradient-to-bl from-blue-50 via-white to-transparent rounded-full blur-3xl opacity-60"></div>
-        
-        {/* Bottom left - Soft purple accent */}
-        <div className="absolute -bottom-96 -left-96 w-screen h-screen bg-gradient-to-tr from-purple-50 via-white to-transparent rounded-full blur-3xl opacity-40"></div>
+        <div className="absolute top-0 right-1/4 w-96 h-96 bg-teal-100/20 rounded-full blur-3xl opacity-40"></div>
+        <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-blue-100/20 rounded-full blur-3xl opacity-40"></div>
       </div>
 
       {/* Content wrapper */}
@@ -59,7 +56,7 @@ function AppContent() {
         </main>
         
         {/* Footer */}
-        <footer className="border-t border-slate-100 bg-gradient-to-b from-white via-blue-50/30 to-white py-6 text-center text-xs text-slate-600">
+        <footer className="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-600">
           <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
             <p>© 2026 Ivy Homes Internship Submission — Chennai Market Portal</p>
             <p>Built by Naman Khanduja</p>
