@@ -114,39 +114,38 @@ export default function Listings({ favourites, onToggleFav }) {
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-10">
       
       {/* Hero Header */}
-      <div className="relative rounded-3xl overflow-hidden glass-card p-8 sm:p-10 border border-slate-800">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl -z-10 pointer-events-none" />
+      <div className="rounded-3xl overflow-hidden p-10 sm:p-14 bg-white border border-slate-200 shadow-sm">
         <div className="max-w-3xl space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 border border-blue-200 text-blue-700 text-xs font-semibold">
+            <Sparkles className="w-4 h-4" />
             <span>Chennai Verified Marketplace</span>
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold font-heading text-white tracking-tight">
+          <h1 className="text-5xl sm:text-6xl font-bold font-heading text-slate-900 tracking-tight">
             Explore Residential Listings
           </h1>
-          <p className="text-slate-400 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 text-lg leading-relaxed max-w-2xl">
             Browse active apartments, villas, and independent floors in Chennai. Real-time unit conversions and data sanitation applied.
           </p>
         </div>
       </div>
 
       {/* Control Bar: Filters & Lie-Fix Toggles */}
-      <div className="glass-card rounded-2xl p-5 border border-slate-800/80 space-y-4 shadow-xl">
+      <div className="rounded-2xl p-8 bg-white border border-slate-200 shadow-sm space-y-6">
         
         {/* Search & Sort Row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
           
           <div className="md:col-span-5 relative">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-3.5" />
+            <Search className="w-5 h-5 text-slate-400 absolute left-4 top-3.5" />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search apartment, locality, ID..."
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-sm text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500/50 transition-all"
+              className="w-full pl-12 pr-4 py-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 placeholder-slate-500 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all"
             />
           </div>
 
@@ -155,7 +154,7 @@ export default function Listings({ favourites, onToggleFav }) {
             <select
               value={locality}
               onChange={(e) => setLocality(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-sm text-slate-200 capitalize focus:outline-none focus:border-emerald-500/50"
+              className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 capitalize focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
             >
               <option value="all">All Localities</option>
               {localities.filter(l => l !== 'all').map(loc => (
@@ -169,7 +168,7 @@ export default function Listings({ favourites, onToggleFav }) {
             <select
               value={bhk}
               onChange={(e) => setBhk(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-emerald-500/50"
+              className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
             >
               <option value="all">All BHKs</option>
               <option value="1">1 BHK</option>
@@ -189,7 +188,7 @@ export default function Listings({ favourites, onToggleFav }) {
                 setSortBy(sb);
                 setOrder(ord);
               }}
-              className="w-full px-3.5 py-2.5 bg-slate-900/90 border border-slate-800 rounded-xl text-sm text-slate-200 focus:outline-none focus:border-emerald-500/50"
+              className="w-full px-4 py-3 bg-white border border-slate-300 rounded-xl text-sm text-slate-900 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all font-medium"
             >
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -200,36 +199,36 @@ export default function Listings({ favourites, onToggleFav }) {
 
         </div>
 
-        {/* Toggles Bar (Sanitation & Discrepancy Switches) */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-slate-800/80 text-xs">
+        {/* Toggles Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-6 pt-6 border-t border-slate-200">
           
-          <div className="flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap items-center gap-6">
             
-            <label className="flex items-center gap-2 cursor-pointer text-slate-300 hover:text-white">
+            <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={deduplicate}
                 onChange={(e) => setDeduplicate(e.target.checked)}
-                className="w-4 h-4 accent-emerald-500 rounded"
+                className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
               />
-              <span>Deduplicate API Repeat Listings (Doc Lie Fix)</span>
+              <span className="text-sm font-medium text-slate-700">Deduplicate API Repeat Listings</span>
             </label>
 
-            <label className="flex items-center gap-2 cursor-pointer text-slate-300 hover:text-white">
+            <label className="flex items-center gap-3 cursor-pointer">
               <input
                 type="checkbox"
                 checked={hideCorrupt}
                 onChange={(e) => setHideCorrupt(e.target.checked)}
-                className="w-4 h-4 accent-emerald-500 rounded"
+                className="w-5 h-5 accent-blue-600 rounded cursor-pointer"
               />
-              <span>Hide Corrupt / Impossible Listings</span>
+              <span className="text-sm font-medium text-slate-700">Hide Corrupt Listings</span>
             </label>
 
           </div>
 
-          <div className="text-slate-400">
-            Showing <span className="font-semibold text-emerald-400">{processedListings.length}</span> listings 
-            (Server Reported: {totalRecords})
+          <div className="text-sm font-medium text-slate-600">
+            Showing <span className="text-blue-600 font-bold">{processedListings.length}</span> listings 
+            <span className="text-slate-500"> (Server: {totalRecords})</span>
           </div>
 
         </div>
@@ -237,23 +236,23 @@ export default function Listings({ favourites, onToggleFav }) {
 
       {/* Listings Grid */}
       {loading ? (
-        <div className="py-20 text-center space-y-4">
-          <div className="w-10 h-10 border-4 border-emerald-500/20 border-t-emerald-500 rounded-full animate-spin mx-auto" />
-          <p className="text-slate-400 text-sm">Fetching properties from API server...</p>
+        <div className="py-24 text-center space-y-4">
+          <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mx-auto" />
+          <p className="text-slate-600 text-sm font-medium">Fetching properties from API server...</p>
         </div>
       ) : error ? (
-        <div className="p-8 rounded-2xl bg-rose-500/10 border border-rose-500/20 text-rose-400 text-center space-y-3">
-          <AlertTriangle className="w-8 h-8 mx-auto" />
-          <p className="font-semibold">{error}</p>
-          <button onClick={fetchListings} className="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold">
+        <div className="p-10 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-center space-y-4">
+          <AlertTriangle className="w-10 h-10 mx-auto" />
+          <p className="font-semibold text-lg">{error}</p>
+          <button onClick={fetchListings} className="px-6 py-2 rounded-xl bg-red-600 text-white text-sm font-bold hover:bg-red-700">
             Retry Connection
           </button>
         </div>
       ) : processedListings.length === 0 ? (
-        <div className="py-16 text-center glass-card rounded-2xl border border-slate-800">
-          <Building2 className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-white">No properties found</h3>
-          <p className="text-slate-400 text-xs mt-1">Try relaxing your search or filter parameters.</p>
+        <div className="py-20 text-center rounded-2xl border border-slate-200 bg-white">
+          <Building2 className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-slate-900">No properties found</h3>
+          <p className="text-slate-600 text-sm mt-2">Try relaxing your search or filter parameters.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -262,59 +261,59 @@ export default function Listings({ favourites, onToggleFav }) {
             return (
               <div
                 key={property.listing_id}
-                className="glass-card glass-card-hover rounded-2xl overflow-hidden border border-slate-800 flex flex-col justify-between"
+                className="rounded-2xl overflow-hidden border border-slate-200 bg-white shadow-sm hover:shadow-lg hover:border-blue-300 transition-all flex flex-col justify-between"
               >
                 <div>
                   
                   {/* Property Card Header */}
-                  <div className="p-5 pb-3 relative">
+                  <div className="p-6 pb-4">
                     
                     {/* Top Badges */}
-                    <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="text-[10px] font-mono font-bold tracking-wide uppercase px-2.5 py-1 rounded-md bg-slate-900 text-slate-300 border border-slate-800">
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      <span className="text-xs font-mono font-bold tracking-widest uppercase px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200">
                         {property.listing_id}
                       </span>
 
-                      <div className="flex items-center gap-1.5">
+                      <div className="flex items-center gap-2">
                         {property.is_verified && (
-                          <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-semibold">
-                            <ShieldCheck className="w-3 h-3" />
+                          <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold">
+                            <ShieldCheck className="w-3.5 h-3.5" />
                             Verified
                           </span>
                         )}
                         <button
                           onClick={() => onToggleFav(property.listing_id)}
-                          className={`p-1.5 rounded-lg border transition-colors ${
+                          className={`p-2 rounded-lg border transition-all ${
                             isFav
-                              ? 'bg-rose-500/20 border-rose-500/40 text-rose-400'
-                              : 'bg-slate-900 border-slate-800 text-slate-400 hover:text-rose-400'
+                              ? 'bg-red-50 border-red-300 text-red-600'
+                              : 'bg-slate-50 border-slate-200 text-slate-400 hover:border-red-300 hover:text-red-600'
                           }`}
                         >
-                          <Heart className="w-4 h-4 fill-current" />
+                          <Heart className="w-5 h-5 fill-current" />
                         </button>
                       </div>
                     </div>
 
                     {/* Title & Locality */}
-                    <h3 className="font-heading font-bold text-lg text-white line-clamp-1">
+                    <h3 className="font-heading font-bold text-lg text-slate-900 line-clamp-2 mb-2">
                       {property.apartment_name || 'Independent Residence'}
                     </h3>
-                    <p className="flex items-center gap-1 text-xs text-slate-400 capitalize mt-1">
-                      <MapPin className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                    <p className="flex items-center gap-2 text-sm text-slate-600 capitalize">
+                      <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
                       <span>{property.locality}, Chennai</span>
                     </p>
 
-                    {/* Unit Notice Warning Badge (Documentation Lie Fix) */}
+                    {/* Unit Notice Warning Badge */}
                     {property.unit_notice && (
-                      <div className="mt-3 p-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-300 text-[11px] flex items-start gap-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400 shrink-0 mt-0.5" />
+                      <div className="mt-4 p-3 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-xs flex items-start gap-2">
+                        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                         <span>{property.unit_notice}</span>
                       </div>
                     )}
 
                     {property.is_fake && (
-                      <div className="mt-3 p-2 rounded-lg bg-purple-500/10 border border-purple-500/20 text-purple-300 text-[11px] flex items-start gap-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 text-purple-400 shrink-0 mt-0.5" />
+                      <div className="mt-4 p-3 rounded-lg bg-purple-50 border border-purple-300 text-purple-800 text-xs flex items-start gap-2">
+                        <AlertTriangle className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
                         <span>Suspected Lead-Gen Fake Listing</span>
                       </div>
                     )}
@@ -322,35 +321,44 @@ export default function Listings({ favourites, onToggleFav }) {
                   </div>
 
                   {/* Specs Grid */}
-                  <div className="px-5 py-3 grid grid-cols-3 gap-2 border-y border-slate-800/60 bg-slate-900/40 text-xs">
-                    <div className="flex items-center gap-1.5 text-slate-300">
-                      <Bed className="w-4 h-4 text-slate-400" />
-                      <span>{property.bedroom} BHK</span>
+                  <div className="px-6 py-4 grid grid-cols-3 gap-3 border-y border-slate-200 bg-blue-50/40">
+                    <div className="flex items-center gap-2 text-slate-700">
+                      <Bed className="w-5 h-5 text-blue-600" />
+                      <div>
+                        <div className="text-xs text-slate-600">Bedroom</div>
+                        <div className="font-bold text-sm">{property.bedroom}</div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5 text-slate-300">
-                      <Bath className="w-4 h-4 text-slate-400" />
-                      <span>{property.bathroom} Bath</span>
+                    <div className="flex items-center gap-2 text-slate-700">
+                      <Bath className="w-5 h-5 text-blue-600" />
+                      <div>
+                        <div className="text-xs text-slate-600">Bathroom</div>
+                        <div className="font-bold text-sm">{property.bathroom}</div>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-1.5 text-slate-300">
-                      <Maximize2 className="w-4 h-4 text-slate-400" />
-                      <span>{property.normalized_carpet_area || property.carpet_area} sqft</span>
+                    <div className="flex items-center gap-2 text-slate-700">
+                      <Maximize2 className="w-5 h-5 text-blue-600" />
+                      <div>
+                        <div className="text-xs text-slate-600">Area</div>
+                        <div className="font-bold text-sm text-nowrap">{property.normalized_carpet_area || property.carpet_area} sqft</div>
+                      </div>
                     </div>
                   </div>
 
                 </div>
 
                 {/* Card Footer: Price & View Link */}
-                <div className="p-5 flex items-center justify-between border-t border-slate-800/80">
+                <div className="p-6 flex items-center justify-between border-t border-slate-200">
                   <div>
-                    <span className="text-[10px] uppercase font-semibold text-slate-400 block">Total Price</span>
-                    <span className="font-heading font-extrabold text-lg text-emerald-400">
+                    <span className="text-xs uppercase font-semibold text-slate-500 block">Total Price</span>
+                    <span className="font-heading font-bold text-xl text-blue-600 mt-1">
                       {formatPrice(property.price)}
                     </span>
                   </div>
 
                   <Link
                     to={`/listings/${property.listing_id}`}
-                    className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 text-xs font-bold transition-all"
+                    className="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold transition-all shadow-sm hover:shadow-md"
                   >
                     View Details
                   </Link>
@@ -363,26 +371,26 @@ export default function Listings({ favourites, onToggleFav }) {
       )}
 
       {/* Pagination Footer */}
-      <div className="flex items-center justify-between pt-6 border-t border-slate-800">
+      <div className="flex items-center justify-between pt-8 border-t border-slate-200">
         <button
           onClick={() => setPage(p => Math.max(1, p - 1))}
           disabled={page === 1}
-          className="flex items-center gap-1 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-800 disabled:opacity-40"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
         >
-          <ChevronLeft className="w-4 h-4" />
-          <span>Previous Page</span>
+          <ChevronLeft className="w-5 h-5" />
+          <span>Previous</span>
         </button>
 
-        <span className="text-xs text-slate-400 font-mono">
-          Page <strong className="text-emerald-400">{page}</strong>
+        <span className="text-sm font-mono text-slate-600">
+          Page <strong className="text-blue-600 text-base">{page}</strong>
         </span>
 
         <button
           onClick={() => setPage(p => p + 1)}
-          className="flex items-center gap-1 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 text-xs font-bold hover:bg-slate-800"
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-700 text-sm font-bold hover:bg-slate-50 transition-all"
         >
-          <span>Next Page</span>
-          <ChevronRight className="w-4 h-4" />
+          <span>Next</span>
+          <ChevronRight className="w-5 h-5" />
         </button>
       </div>
 
