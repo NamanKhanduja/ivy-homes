@@ -32,28 +32,38 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
-      <Navbar favCount={favourites.length} />
-      <main className="flex-1">
-        <Routes>
-          <Route path="/" element={<Listings favourites={favourites} onToggleFav={handleToggleFav} />} />
-          <Route path="/listings/:id" element={<ListingDetail favourites={favourites} onToggleFav={handleToggleFav} />} />
-          <Route path="/rentals" element={<Rentals />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/favourites" element={<Favourites favourites={favourites} onToggleFav={handleToggleFav} />} />
-          <Route path="/insights" element={<Insights />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </main>
-      
-      {/* Footer */}
-      <footer className="border-t border-slate-800/80 bg-slate-950 py-6 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
-          <p>© 2026 Ivy Homes Internship Submission — Chennai Market Portal</p>
-          <p>Built by Naman Khanduja</p>
-        </div>
-      </footer>
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-slate-100 flex flex-col font-sans relative overflow-hidden">
+      {/* Animated gradient background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl"></div>
+      </div>
+
+      {/* Content wrapper */}
+      <div className="relative z-10">
+        <Navbar favCount={favourites.length} />
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Listings favourites={favourites} onToggleFav={handleToggleFav} />} />
+            <Route path="/listings/:id" element={<ListingDetail favourites={favourites} onToggleFav={handleToggleFav} />} />
+            <Route path="/rentals" element={<Rentals />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/favourites" element={<Favourites favourites={favourites} onToggleFav={handleToggleFav} />} />
+            <Route path="/insights" element={<Insights />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
+        
+        {/* Footer */}
+        <footer className="border-t border-slate-800/80 bg-gradient-to-b from-slate-950/80 to-slate-950 backdrop-blur-sm py-6 text-center text-xs text-slate-500">
+          <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
+            <p>© 2026 Ivy Homes Internship Submission — Chennai Market Portal</p>
+            <p>Built by Naman Khanduja</p>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
