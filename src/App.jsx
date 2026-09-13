@@ -32,20 +32,17 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-purple-900 to-rose-900 text-slate-100 flex flex-col font-sans relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-slate-900 flex flex-col font-sans relative overflow-hidden">
       {/* Animated gradient background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Top right - Emerald/Teal glow */}
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-emerald-400/30 to-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
+        {/* Top right - Soft purple glow */}
+        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-200/40 to-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
         
-        {/* Bottom left - Purple/Pink glow */}
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-rose-400/20 to-purple-400/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+        {/* Bottom left - Soft orange/peach glow */}
+        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-orange-100/30 to-rose-100/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
         
-        {/* Center - Orange/Yellow accent */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-orange-400/10 to-yellow-400/5 rounded-full blur-3xl"></div>
-        
-        {/* Subtle overlay grid effect */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.02)_1px,transparent_1px)] bg-[size:50px_50px]"></div>
+        {/* Center - Soft indigo accent */}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-blue-100/20 to-indigo-100/10 rounded-full blur-3xl"></div>
       </div>
 
       {/* Content wrapper */}
@@ -65,7 +62,7 @@ function AppContent() {
         </main>
         
         {/* Footer */}
-        <footer className="border-t border-white/10 bg-gradient-to-b from-black/40 to-black/60 backdrop-blur-sm py-6 text-center text-xs text-slate-400">
+        <footer className="border-t border-slate-200 bg-gradient-to-b from-white/80 to-slate-50/60 backdrop-blur-sm py-6 text-center text-xs text-slate-600">
           <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
             <p>© 2026 Ivy Homes Internship Submission — Chennai Market Portal</p>
             <p>Built by Naman Khanduja</p>
