@@ -32,17 +32,14 @@ function AppContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 text-slate-900 flex flex-col font-sans relative overflow-hidden">
-      {/* Animated gradient background elements */}
+    <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans relative overflow-hidden">
+      {/* Premium gradient background with clean accents */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Top right - Soft purple glow */}
-        <div className="absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-purple-200/40 to-blue-200/20 rounded-full blur-3xl animate-pulse"></div>
+        {/* Top right - Soft blue gradient */}
+        <div className="absolute -top-96 -right-96 w-screen h-screen bg-gradient-to-bl from-blue-50 via-white to-transparent rounded-full blur-3xl opacity-60"></div>
         
-        {/* Bottom left - Soft orange/peach glow */}
-        <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-orange-100/30 to-rose-100/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
-        
-        {/* Center - Soft indigo accent */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-blue-100/20 to-indigo-100/10 rounded-full blur-3xl"></div>
+        {/* Bottom left - Soft purple accent */}
+        <div className="absolute -bottom-96 -left-96 w-screen h-screen bg-gradient-to-tr from-purple-50 via-white to-transparent rounded-full blur-3xl opacity-40"></div>
       </div>
 
       {/* Content wrapper */}
@@ -62,7 +59,7 @@ function AppContent() {
         </main>
         
         {/* Footer */}
-        <footer className="border-t border-slate-200 bg-gradient-to-b from-white/80 to-slate-50/60 backdrop-blur-sm py-6 text-center text-xs text-slate-600">
+        <footer className="border-t border-slate-100 bg-gradient-to-b from-white via-blue-50/30 to-white py-6 text-center text-xs text-slate-600">
           <div className="max-w-7xl mx-auto px-4 flex flex-wrap items-center justify-between gap-4">
             <p>© 2026 Ivy Homes Internship Submission — Chennai Market Portal</p>
             <p>Built by Naman Khanduja</p>
